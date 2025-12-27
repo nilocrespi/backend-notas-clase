@@ -3,7 +3,7 @@ import {Movie} from "../models/movie.model.js"
 
 const getMovies = async () => {
     connectDB()
-    const movies = await Movie.find().sort({_id:-1})
+    const movies = await Movie.find().sort({year:-1})
     return movies
 }
 
@@ -37,8 +37,7 @@ const updateMovie = async (id, updates) => {
 const deleteMovie = async (id) => {
     connectDB()
     const deletedMovie = await Movie.findByIdAndDelete (id)
-    console.log (deletedMovie)
-    process.exit(1)
+    return deletedMovie
 }
 
 // deleteMovie("6938c50570dbb5a0dc7b0bb7")

@@ -79,6 +79,7 @@ section {
 }
 
 section div {
+    border: solid 2px rgb(82, 82, 143);
     background: #fff;
     padding: 15px;
     border-radius: 8px;

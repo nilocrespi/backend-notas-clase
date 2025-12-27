@@ -41,6 +41,11 @@ $form.addEventListener("submit", async (e) => {
         director: $director.value
     }
 
+    if(!$title.value || !$year.value || !$genre.value || !$rating.value || !$director.value) {
+        alert ("debes completar el formulario")
+        return
+    }
+
     // method: POST
     // url: /products
 
@@ -58,13 +63,21 @@ $form.addEventListener("submit", async (e) => {
 
     const data = await response.json()
 
-    alert(`Producto agregado con exito, id: ${data._id}`)
+    alert(`Pelicula agregada con exito, id: ${data._id}`)
 
+    renderMovies()
+
+    // limpiar formulario
+
+    $form.reset()
+
+    // o tambien puede ser:
+    /* 
     $title.value = ""
     $year.value = ""
     $genre.value = ""
     $rating.value = ""
     $director.value = ""
-
+    */
 })
 
