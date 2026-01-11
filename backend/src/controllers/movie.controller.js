@@ -1,40 +1,48 @@
-import {connectDB} from "../config/mongodb.js"
 import {Movie} from "../models/movie.model.js"
 
-const getMovies = async () => {
-    const movies = await Movie.find().sort({year:-1})
-    return movies
+const getMovies = async (req, res) => {
+    try {
+        const movies = await Movie.find().sort({year:-1})
+        res.json({success: true, data: movies})
+    } catch (error) {
+        res.status(500).json({success: false, error: "Error al traer peliculas"})
+    }
+
 }
 
-// getMovies()
+const createMovie = async (req, res) => {
+    try {
+        const body = req.body
+        const {title, year, genre, rating, director} = body
 
-const createMovie = async (data) => {
-    const createdMovie = await Movie.create (data)
-    return createdMovie
+        if (!title) {
+            return res.status(400).json({success: false, error: "Data invalida, vuelve a intentarlo"})
+        }
+
+        const createdMovie = await Movie.create ({title, year, genre, rating, director})
+
+        res.status(201).json({ success: true, data: createdMovie })
+    } catch (error) {
+        res.status(500).json({success: false, error: error.message})
+    }
 }
-
-/*
-createMovie({
-    title: "Bugonia",
-    year: 2025,
-    genre: "Sci-Fi",
-    rating: 2.0,
-    director: "Yorgos Lanthimos"
-})
-*/
 
 const updateMovie = async (id, updates) => {
-    const updatedMovie = await Movie.findByIdAndUpdate (id, updates, {new: true})
-    return (updatedMovie)
+    try {
+        const updatedMovie = await Movie.findByIdAndUpdate (id, updates, {new: true})
+        return {success: true, data: updatedMovie}
+    } catch (error) {
+        return {success: false, error: error.message}
+    }
 }
-
-// updateMovie("6938c50570dbb5a0dc7b0bb7", {rating: 1.0})
 
 const deleteMovie = async (id) => {
-    const deletedMovie = await Movie.findByIdAndDelete (id)
-    return deletedMovie
+    try {
+        const deletedMovie = await Movie.findByIdAndDelete (id)
+        return {success: true, data: deletedMovie}
+    } catch (error) {
+        return {success: false, error: error.message}
+    }
 }
-
-// deleteMovie("6938c50570dbb5a0dc7b0bb7")
 
 export {getMovies, createMovie, updateMovie, deleteMovie}

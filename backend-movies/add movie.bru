@@ -1,0 +1,26 @@
+meta {
+  name: add movie
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:50000/movies
+  body: json
+  auth: inherit
+}
+
+body:json {
+    {
+      "title": "Casablanca",
+      "year": 1942,
+      "genre": "War",
+      "rating": 8,
+      "director": "Michael Curtiz"
+    }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

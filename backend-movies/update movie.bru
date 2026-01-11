@@ -1,0 +1,26 @@
+meta {
+  name: update movie
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://localhost:50000/movies/695d9951bf133b62835d9aca
+  body: json
+  auth: inherit
+}
+
+body:json {
+    {
+      "title": "Casablanca",
+      "year": 1942,
+      "genre": "War, Drama",
+      "rating": 9,
+      "director": "Michael Curtiz"
+    }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,57 +1,58 @@
-const $section = document.querySelector("section");
+//Referencia a elementos HTML
 const $form = document.querySelector("form");
 const $title = document.getElementById("title");
 const $year = document.getElementById("year");
 const $genre = document.getElementById("genre");
 const $rating = document.getElementById("rating");
 const $director = document.getElementById("director");
+
+const $section = document.querySelector("section");
+
 const $btnSubmit = document.getElementById("btn-submit")
 const $btnCancel = document.getElementById("btn-cancel")
 
+// estados globales 
+// variables globales
 let movies = []
-
 let isEditing = false
 let idMovieEditing = null
+let error = null
+
 
 const renderMovies = async () => {
-    const response = await fetch ("http://localhost:50000/movies", {
-        method: "GET"
-    })
-    
-    movies = await response.json()
+    try {
+        const respuestaDelServidor = await fetch ("http://localhost:50000/movies", {
+            method: "GET"
+        })
 
-    $section.innerHTML = ""
+        let responseData = await respuestaDelServidor.json()
 
-    movies.forEach ((movie) => {
-        const { title, year, genre, rating, director, _id } = movie
+        movies = responseData.data
 
-        /*let textStock
+        $section.innerHTML = ""
 
-        if (rating = "") {
-            textStock = "sin rating"
-        } else {
-            textStock = `${rating} puntos`
-        }*/
+        movies.forEach((movie) => {
+            const { title, year, genre, rating, director, _id } = movie
 
-
-        $section.innerHTML += 
-            `<div>
-                <h3>Title: ${title}</h3>
-                <p>Year: ${year}</p>
-                <p>Genre: ${genre}</p>
-                <p>Rating: ${rating}</p>
-                <p>Director: ${director}</p>
-                <button onclick="handleEditingMovie('${_id}')">Actualizar</button>
-                <button onclick="deleteMovie('${_id}')">Borrar</button>
-            </div>`
-    })
+            $section.innerHTML += 
+                `<div>
+                    <h3>Title: ${title}</h3>
+                    <p>Year: ${year}</p>
+                    <p>Genre: ${genre}</p>
+                    <p>Rating: ${rating}</p>
+                    <p>Director: ${director}</p>
+                    <button onclick="handleEditingMovie('${_id}')">Actualizar</button>
+                    <button onclick="deleteMovie('${_id}')">Borrar</button>
+                </div>`
+        })
+    } catch (e) {
+        error = "Error al traer peliculas, el servidor no responde"
+        alert (error)
+    }
 }
 
 renderMovies()
 
-// controlar el evento
-
-// definir la funcion controladora del submit
 $form.addEventListener("submit", (e) => {
     e.preventDefault()
 
@@ -88,15 +89,6 @@ const addMovie = async () => {
         return
     }
 
-    console.log(dataMovie)
-    
-    // method: POST
-    // url: /products
-
-    // ✅ avisar que tipo de dato le voy a enviar (json)
-    // ⌚ enviarle la data en formato json
-
-    // peticion al backend
     const response = await fetch("http://localhost:50000/movies", {
         method: "POST",
         headers: {
@@ -105,24 +97,13 @@ const addMovie = async () => {
         body: JSON.stringify(dataMovie)
     })
 
-    const createdMovie = await response.json()
+    const responseData = await response.json()
+    const createdMovie = responseData.data
 
     alert(`Pelicula agregada con exito, id: ${createdMovie._id}`)
 
     renderMovies()
-
-    // limpiar formulario
-
     $form.reset()
-
-    // o tambien puede ser:
-    /* 
-    $title.value = ""
-    $year.value = ""
-    $genre.value = ""
-    $rating.value = ""
-    $director.value = ""
-    */
 }
 
 const deleteMovie = async (id) => {
@@ -132,22 +113,20 @@ const deleteMovie = async (id) => {
         return
     }
 
-    console.log(`http://localhost:50000/movies/${id}`)
-
-
     try {
         const res = await fetch(`http://localhost:50000/movies/${id}`, { method: "DELETE" })
         const movie = await res.json()
+        const deletedMovie = responseData.data
 
         alert (
             `
-            se borro la pelicula ${movie.title},
-            ID: ${movie._id}
+            se borro la pelicula ${deletedMovie.title},
+            ID: ${deletedMovie._id}
             `
         )
         renderMovies()
     } catch (error) {
-        console.error("no se pudo borrar la pelicula")
+        console.error("No se pudo borrar la pelicula")
     }
 }
 
@@ -167,13 +146,12 @@ const handleEditingMovie = async (id) => {
     $director.value = director
 }
 
-
 const updateMovie = async (updatedData) => {
     const res = await fetch (`http://localhost:50000/movies/${idMovieEditing}`,
         {
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json" // te estoy mandando un json 😎
+                "Content-Type": "application/json"
             },
             body: JSON.stringify (updatedData)
         }
