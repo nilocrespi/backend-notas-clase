@@ -7,7 +7,6 @@ const getMovies = async (req, res) => {
     } catch (error) {
         res.status(500).json({success: false, error: "Error al traer peliculas"})
     }
-
 }
 
 const createMovie = async (req, res) => {

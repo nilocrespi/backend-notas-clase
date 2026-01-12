@@ -1,3 +1,28 @@
+# API REST
+## Patron de diseño
+
+### MVC
+    model-view (routes)-controller (modelo vista-controlador)
+
+### Responsabilidades:
+
+#### .src/index.js
+	- ejecuta el servidor
+	- punto de entrada de la req
+
+#### .src/routes/moviesRouter.js
+	- analizar metodo y ruta
+
+#### .src/controllers/movie.controller.js
+	- resolver la logica de negocio
+	- usar el modelo
+	- responder al usuario
+
+#### .src/models/movie.model.js
+	- conexion con db
+	- crea el modelo con la data
+
+
 ## Peticiones CURL
 
 #### Peticion curl para obtener peliculas
