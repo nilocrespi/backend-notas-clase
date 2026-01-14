@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import {connectDB} from "../src/config/mongodb.js"
 import {movieRouter} from "./routes/moviesRouter.js"
+import {authRouter} from "./routes/authRouter.js"
 
 const serverHttp = express()
 
@@ -9,6 +10,7 @@ serverHttp.use(cors())
 serverHttp.use(express.json())
 
 serverHttp.use("/movies", movieRouter)
+serverHttp.use("/auth", authRouter)
 // si la peticion (cualquiera sea) empieza con /movies se las va a enviar al router
 // serverHttp.use("/purchase", purchaseRouter)
 // serverHttp.use("/clients", clientsRouter)
