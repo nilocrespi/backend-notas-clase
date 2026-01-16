@@ -1,5 +1,5 @@
 import {Router} from "express"
-import {register} from "../controllers/auth.controller.js"
+import {register, login} from "../controllers/auth.controller.js"
 
 const authRouter = Router()
 
@@ -8,7 +8,7 @@ const authRouter = Router()
 authRouter.post("/register", register)
 
 // detectar peticion login
-
+authRouter.post("/login", login)
 
 
 

@@ -26,21 +26,33 @@ const createMovie = async (req, res) => {
     }
 }
 
-const updateMovie = async (id, updates) => {
+const updateMovie = async (req, res) => {
     try {
-        const updatedMovie = await Movie.findByIdAndUpdate (id, updates, {new: true})
-        return {success: true, data: updatedMovie}
+        const id = req.params.id
+        const updatedMovie = await Movie.findByIdAndUpdate (id)
+        
+        if (!updatedMovie) {
+            return res.status(404).json ({success: false, error: "no existe pelicula para actualizar"})
+        }
+        
+        res.json({success: true, data:updatedMovie})
     } catch (error) {
-        return {success: false, error: error.message}
+        res.status(500).json({success: false, error: error.message})
     }
 }
 
 const deleteMovie = async (id) => {
     try {
+        const id = req.params.id
         const deletedMovie = await Movie.findByIdAndDelete (id)
-        return {success: true, data: deletedMovie}
+  
+        if (!deletedMovie) {
+            return res.status(404).json ({success: false, error: "no existe pelicula para eliminar"})
+        }
+
+        res.json({success: true, data: deletedMovie})
     } catch (error) {
-        return {success: false, error: error.message}
+        res.status(500).json({success: false, error: error.message})
     }
 }
 
