@@ -107,7 +107,7 @@ const addMovie = async () => {
 }
 
 const deleteMovie = async (id) => {
-    const confirmacion = confirm ("estas seguro que queres borrar la pelicula?")
+    const confirmacion = confirm("estas seguro que queres borrar la pelicula?")
 
     if (!confirmacion) {
         return
@@ -115,7 +115,7 @@ const deleteMovie = async (id) => {
 
     try {
         const res = await fetch(`http://localhost:50000/movies/${id}`, { method: "DELETE" })
-        const movie = await res.json()
+        const responseData = await res.json()
         const deletedMovie = responseData.data
 
         alert (

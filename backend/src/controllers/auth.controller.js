@@ -10,16 +10,16 @@ el controlador resuelve la logica de negocio
 */
 const register = async (req,res) => {
     try {
-        const data = req.body
+        const body = req.body
 
-        const {email, password} = data
+        const {email, password} = body
 
         // implementar validaciones de imput con ZOD
         if (!email || !password) {
             return res.status(400).json ({success: false, error: "data invalida, revisa los datos ingresados"})
         }
 
-        if ((!email.includes("@")) && (!email.endsWith(".com") || !email.endsWith(".net"))) {
+        if (!email.includes("@") || !email.endsWith(".com")) {
             return res.status(400).json ({success: false, error: "correo electronico invalido"})
         }
 
@@ -35,10 +35,13 @@ const register = async (req,res) => {
             password: hash
         }
 
-        const newUser = await User.create (newDataUser)
-        res.status(201).json({ success: true, data: newUser})
+        const newUser = await User.create(newDataUser)
+        res.status(201).json({success: true, data: newUser})
     } catch (error) {
-        res.json({ success: false, error: error.message})
+        if (error.code === 11000) {
+            return res.status(400).json({success: false, error: "email ya existente en base de datos"})
+        }
+        res.status(500).json({success: false, error: error.message})
     }
 }
 
@@ -66,7 +69,7 @@ const login = async (req, res) => {
         //generar un token con libreria jsonwebtoken (jwt.io)
 
         const payload = {_id: foundUser._id, username: foundUser.username, email: foundUser.email}
-        const token = jwt.sign(payload, "contraseña supersegura", {expiresIn: "10s"}) 
+        const token = jwt.sign(payload, "contraseñasupersegura", {expiresIn: "10s"}) 
         res.json({success: true, data: token})
 
     } catch (error) {

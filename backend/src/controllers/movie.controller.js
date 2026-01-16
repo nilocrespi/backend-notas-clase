@@ -41,17 +41,20 @@ const updateMovie = async (req, res) => {
     }
 }
 
-const deleteMovie = async (id) => {
+const deleteMovie = async (req, res) => {
     try {
         const id = req.params.id
         const deletedMovie = await Movie.findByIdAndDelete (id)
-  
+
         if (!deletedMovie) {
             return res.status(404).json ({success: false, error: "no existe pelicula para eliminar"})
         }
 
         res.json({success: true, data: deletedMovie})
     } catch (error) {
+        if (error.kind === "ObjectId") {
+            return res.status(400).json({success: false, error: "ID incorrecto, ingresa un valor valido"})
+        }
         res.status(500).json({success: false, error: error.message})
     }
 }
