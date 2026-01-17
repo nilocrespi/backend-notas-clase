@@ -130,7 +130,7 @@ const deleteMovie = async (id) => {
     }
 }
 
-const handleEditingMovie = async (id) => {
+const handleEditingMovie = (id) => {
     isEditing = true
     idMovieEditing = id
     $btnCancel.style.display = "block"
@@ -164,7 +164,7 @@ const updateMovie = async (updatedData) => {
 
     const dataUpdatedMovie = await res.json()
 
-    alert(`Pelicula actualizada ID: ${dataUpdatedMovie._id}`)
+    alert(`Pelicula actualizada ID: ${dataUpdatedMovie.data._id}`)
     renderMovies()
     initializateStates()
 }
