@@ -26,18 +26,13 @@ const createMovie = async (req, res) => {
     }
 }
 
-const updateMovie = async (req, res) => {
+const updateMovie = async (id, updates) => {
     try {
-        const id = req.params.id
-        const updatedMovie = await Movie.findByIdAndUpdate (id)
-        
-        if (!updatedMovie) {
-            return res.status(404).json ({success: false, error: "no existe pelicula para actualizar"})
-        }
-        
-        res.json({success: true, data:updatedMovie})
+        const updatedMovie = await Movie.findByIdAndUpdate (id, updates, { new: true })
+
+        return {success: true, data:updatedMovie}
     } catch (error) {
-        res.status(500).json({success: false, error: error.message})
+        return { success: false, error: error.message }
     }
 }
 
