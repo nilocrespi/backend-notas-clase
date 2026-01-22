@@ -12,7 +12,7 @@ const register = async (req,res) => {
     try {
         const body = req.body
 
-        const {email, password} = body
+        const {email, password, username} = body
 
         // implementar validaciones de imput con ZOD
         if (!email || !password) {
@@ -31,12 +31,14 @@ const register = async (req,res) => {
         const hash = await bcryptjs.hash(password,10)
 
         const newDataUser = {
-            email: email,
+            username: username,
+            email: email, //se puede simplificar poniendo solo "email"
             password: hash
         }
 
         const newUser = await User.create(newDataUser)
-        res.status(201).json({success: true, data: newUser})
+
+        res.status(201).json({success: true, data: {_id: newUser._id, username: newUser.username, email: newUser.email}})
     } catch (error) {
         if (error.code === 11000) {
             return res.status(400).json({success: false, error: "email ya existente en base de datos"})
@@ -54,8 +56,8 @@ const login = async (req, res) => {
             return res.status(400).json({success: false, error: "data invalida, ingrese los datos requeridos"})
         }
 
-        const foundUser = User.findOne({email: email})
-        
+        const foundUser = await User.findOne({email})
+
         if (!foundUser) {
             return res.status(401).json({success: false, error: "unauthorized"})
         }
@@ -69,7 +71,9 @@ const login = async (req, res) => {
         //generar un token con libreria jsonwebtoken (jwt.io)
 
         const payload = {_id: foundUser._id, username: foundUser.username, email: foundUser.email}
-        const token = jwt.sign(payload, "contraseñasupersegura", {expiresIn: "10s"}) 
+        
+        const token = jwt.sign(payload, "contraseñasupersegura", {expiresIn: "1h"}) 
+        
         res.json({success: true, data: token})
 
     } catch (error) {
