@@ -1,4 +1,5 @@
 import {Movie} from "../models/movie.model.js"
+import jwt from "jsonwebtoken"
 
 const getMovies = async (req, res) => {
     try {
@@ -26,13 +27,20 @@ const createMovie = async (req, res) => {
     }
 }
 
-const updateMovie = async (id, updates) => {
+const updateMovie = async (req, res) => {
     try {
+        const id = req.params.id
+        const updates = req.body
+
         const updatedMovie = await Movie.findByIdAndUpdate (id, updates, { new: true })
 
-        return {success: true, data:updatedMovie}
+        if (!updatedMovie) {
+            return res.status(404).json({success: false, error: "no existe pelicula para actualizar"})
+        }
+
+        res.json ({success: true, data: updatedMovie})
     } catch (error) {
-        return { success: false, error: error.message }
+        return res.status(500).json({success: false, error: error.message})
     }
 }
 

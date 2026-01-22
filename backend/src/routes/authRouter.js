@@ -10,7 +10,4 @@ authRouter.post("/register", register)
 // detectar peticion login
 authRouter.post("/login", login)
 
-
-
-
 export {authRouter}
