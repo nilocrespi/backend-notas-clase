@@ -1,7 +1,7 @@
 const movieService = {
   async getMovies() {
     try {
-      const response = await fetch("http://localhost:50000/movies", {
+      const response = await fetch("http://localhost:50000/api/movies", {
         method: "GET"
       });
       const responseData = await response.json();
@@ -12,7 +12,7 @@ const movieService = {
   },
 
   async addMovie(dataMovie) {
-    const response = await fetch("http://localhost:50000/movies", {
+    const response = await fetch("http://localhost:50000/api/movies", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -24,7 +24,7 @@ const movieService = {
   },
 
   async updateMovie(id, updatedData) {
-    const res = await fetch(`http://localhost:50000/movies/${id}`, {
+    const res = await fetch(`http://localhost:50000/api/movies/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -41,7 +41,7 @@ const movieService = {
   },
 
   async deleteMovie(id) {
-    const res = await fetch(`http://localhost:50000/movies/${id}`, { 
+    const res = await fetch(`http://localhost:50000/api/movies/${id}`, { 
       method: "DELETE" 
     });
     const responseData = await res.json();

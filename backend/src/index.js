@@ -14,8 +14,8 @@ serverHttp.use(cors())
 serverHttp.use(express.json())
 
 //serverHttp.use("/movies", authMiddleware, movieRouter)
-serverHttp.use("/movies", movieRouter)
-serverHttp.use("/auth", authRouter)
+serverHttp.use("/api/movies", movieRouter)
+serverHttp.use("/api/auth", authRouter)
 // si la peticion (cualquiera sea) empieza con /movies se las va a enviar al router
 // serverHttp.use("/purchase", purchaseRouter)
 // serverHttp.use("/clients", clientsRouter)
