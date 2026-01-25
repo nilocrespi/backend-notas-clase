@@ -1,6 +1,9 @@
 import {connect} from "mongoose"
+import dotenv from "dotenv"
 
-const URI_DB = "mongodb://localhost:27017/cinema"
+dotenv.config()
+
+const URI_DB = process.env.URI_DB
 
 const connectDB = async () => {
   try {

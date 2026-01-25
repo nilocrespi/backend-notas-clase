@@ -1,6 +1,12 @@
 import {User} from "../models/user.model.js"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+
+dotenv.config()
+
+const JWT_SECRET = process.env.JWT_SECRET
+const JWT_EXPIRES = process.env.JWT_EXPIRES
 
 /*
 toma el input del user
@@ -72,7 +78,7 @@ const login = async (req, res) => {
 
         const payload = {_id: foundUser._id, username: foundUser.username, email: foundUser.email}
         
-        const token = jwt.sign(payload, "contraseñasupersegura", {expiresIn: "1h"}) 
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES })
         
         res.json({success: true, data: token})
 

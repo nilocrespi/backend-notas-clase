@@ -1,5 +1,4 @@
 import {Movie} from "../models/movie.model.js"
-import jwt from "jsonwebtoken"
 
 const getMovies = async (req, res) => {
     try {

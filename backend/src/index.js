@@ -6,14 +6,15 @@ import {authRouter} from "./routes/authRouter.js"
 import {authMiddleware} from "./middleware/authMiddleware.js"
 import dotenv from "dotenv"
 
-const serverHttp = express()
-
 dotenv.config()
+
+const serverHttp = express()
 
 serverHttp.use(cors())
 serverHttp.use(express.json())
 
-serverHttp.use("/movies", authMiddleware, movieRouter)
+//serverHttp.use("/movies", authMiddleware, movieRouter)
+serverHttp.use("/movies", movieRouter)
 serverHttp.use("/auth", authRouter)
 // si la peticion (cualquiera sea) empieza con /movies se las va a enviar al router
 // serverHttp.use("/purchase", purchaseRouter)
